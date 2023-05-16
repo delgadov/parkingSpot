@@ -27,9 +27,9 @@ To run the Parking Spot Management System locally, follow these steps:
   ## API Endpoints
 The Parking Spot Management System provides the following RESTFUL API endpoints:
 
-* **`GET /parking-spots`:** Retrieve a list of all parking spots.
-* **`GET /parking-spots/{id}`:** Retrieve details of a specific parking spot by its ID.
-* **`POST /parking-spots`:** Create a new parking spot.
-* **`PUT /parking-spots/{id}`:** Update the details of a parking spot.
-* **`DELETE /parking-spots/{id}`:** Delete a parking spot by its ID.
+* **`GET /rest/api/v1/parking-spot`:** Retrieve a list of all parking spots.
+* **`GET /rest/api/v1/parking-spot/{id}`:** Retrieve details of a specific parking spot by its ID.
+* **`POST /rest/api/v1/parking-spot`:** Create a new parking spot.
+* **`PUT /rest/api/v1/parking-spot/{id}`:** Update the details of a parking spot.
+* **`DELETE /rest/api/v1/parking-spot/{id}`:** Delete a parking spot by its ID.
 Refer to the API documentation for detailed information about request/response formats and parameters.
