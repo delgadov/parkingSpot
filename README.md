@@ -25,7 +25,7 @@ To run the Parking Spot Management System locally, follow these steps:
 5. Access the application in your browser at `http://localhost:8080` (or the specified port).
 
   ## API Endpoints
-The Parking Spot Management System provides the following RESTful API endpoints:
+The Parking Spot Management System provides the following RESTFUL API endpoints:
 
 * **`GET /parking-spots`:** Retrieve a list of all parking spots.
 * **`GET /parking-spots/{id}`:** Retrieve details of a specific parking spot by its ID.
