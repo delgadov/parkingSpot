@@ -18,7 +18,7 @@ The Parking Spot Management System is a Java-based application that allows users
 ## Getting Started
 To run the Parking Spot Management System locally, follow these steps:
 
-1. Clone the repository: `git clone <repository-url>`
+1. Clone the repository: `git clone https://github.com/delgadov/parkingSpot.git`
 2. Set up the database and update the database configuration in `application.properties`.
 3. Build the project using your preferred build tool (Maven or Gradle).
 4. Run the application.
