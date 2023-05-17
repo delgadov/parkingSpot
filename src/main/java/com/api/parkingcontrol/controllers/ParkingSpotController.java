@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -36,11 +34,11 @@ public class ParkingSpotController {
         if (parkingSpotService.existsByParkingSpotNumber(parkingSpotRequestDto.getParkingSpotNumber()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Parking Spot Number " + parkingSpotRequestDto.getParkingSpotNumber() + " already exists.");
 
-        if (parkingSpotService.exitsByLicensePlateCar(parkingSpotRequestDto.getLicensePlateCar())) {
+        if (parkingSpotService.existsByLicensePlateCar(parkingSpotRequestDto.getLicensePlateCar())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "License Plate Car " + parkingSpotRequestDto.getLicensePlateCar() + " already exists.");
         }
 
-        if (parkingSpotService.exitsByApartmentAndBlock(parkingSpotRequestDto.getApartment(), parkingSpotRequestDto.getBlock())) {
+        if (parkingSpotService.existsByApartmentAndBlock(parkingSpotRequestDto.getApartment(), parkingSpotRequestDto.getBlock())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Apartment " + parkingSpotRequestDto.getApartment() + " and " + parkingSpotRequestDto.getBlock() + " block already exists.");
         }
 

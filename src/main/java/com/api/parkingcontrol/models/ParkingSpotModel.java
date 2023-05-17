@@ -1,6 +1,7 @@
 package com.api.parkingcontrol.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TB_PARKING_SPOT ")
+@Builder
 @Data
 public class ParkingSpotModel {
     @Id
