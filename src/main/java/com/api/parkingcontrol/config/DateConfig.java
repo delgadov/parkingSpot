@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Primary;
 
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Configuration class for date and time settings for UTC
+ */
 @Configuration
 public class DateConfig {
 
