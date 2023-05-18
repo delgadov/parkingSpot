@@ -1,50 +1,28 @@
 package com.api.parkingcontrol.services;
 
-import com.api.parkingcontrol.models.ParkingSpotModel;
-import com.api.parkingcontrol.repositories.ParkingSpotRepository;
+import com.api.parkingcontrol.dtos.ParkingSpotRequestDto;
+import com.api.parkingcontrol.dtos.ParkingSpotResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
-@Service
-public class ParkingSpotService {
-    private final ParkingSpotRepository parkingSpotRepository;
+public interface ParkingSpotService {
 
-    public ParkingSpotService(ParkingSpotRepository parkingSpotRepository) {
-        this.parkingSpotRepository = parkingSpotRepository;
-    }
+    ParkingSpotResponseDto save(ParkingSpotRequestDto parkingSpotModel);
 
-    @Transactional
-    public ParkingSpotModel save(ParkingSpotModel parkingSpotModel) {
-        return parkingSpotRepository.save(parkingSpotModel);
-    }
+    boolean existsByParkingSpotNumber(String parkingSpotNumber);
 
-    public boolean existsByParkingSpotNumber(String parkingSpotNumber) {
-        return parkingSpotRepository.existsByParkingSpotNumber(parkingSpotNumber);
-    }
+    boolean existsByLicensePlateCar(String licensePlateCar);
 
-    public boolean existsByLicensePlateCar(String licensePlateCar) {
-        return parkingSpotRepository.existsByLicensePlateCar(licensePlateCar);
-    }
+    boolean existsByApartmentAndBlock(String apartment, String block);
 
-    public boolean existsByApartmentAndBlock(String apartment, String block) {
-        return parkingSpotRepository.existsByApartmentAndBlock(apartment, block);
-    }
+    Page<ParkingSpotResponseDto> findAll(Pageable pageable);
 
-    public Page<ParkingSpotModel> findAll(Pageable pageable) {
-        return parkingSpotRepository.findAll(pageable);
-    }
+    ParkingSpotResponseDto findById(UUID uuid);
 
-    public Optional<ParkingSpotModel> findById(UUID uuid) {
-        return parkingSpotRepository.findById(uuid);
-    }
+    void deleteById(UUID id);
 
-    @Transactional
-    public void deleteById(UUID id) {
-        parkingSpotRepository.deleteById(id);
-    }
+    ParkingSpotResponseDto update(UUID id, ParkingSpotRequestDto parkingSpotRequestDto);
+
 }

@@ -28,6 +28,8 @@ public interface ModelMapper {
     @Mapping(source = "registrationDate", target = "registrationDate")
     ParkingSpotResponseDto toResponseDto(ParkingSpotModel parkingSpotModel);
 
+    ParkingSpotRequestDto toRequestDto(ParkingSpotModel parkingSpotModel);
+
     List<ParkingSpotResponseDto> toListResponseDto(List<ParkingSpotModel> parkingSpotModelList);
 
     default Page<ParkingSpotResponseDto> toPageResponseDto(Page<ParkingSpotModel> parkingSpotModelPage) {

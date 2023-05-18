@@ -1,16 +1,20 @@
 package com.api.parkingcontrol.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_PARKING_SPOT ")
-@Builder
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ParkingSpotModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

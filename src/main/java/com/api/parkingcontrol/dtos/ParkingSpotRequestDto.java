@@ -1,10 +1,12 @@
 package com.api.parkingcontrol.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
+@Builder
 public class ParkingSpotRequestDto {
     @NotBlank
     private String parkingSpotNumber;
