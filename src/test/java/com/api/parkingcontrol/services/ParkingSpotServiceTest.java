@@ -45,7 +45,17 @@ class ParkingSpotServiceTest {
 
     @BeforeEach
     public void setUp() {
-        parkingSpotModel = ParkingSpotModel.builder().id(UUID.randomUUID()).parkingSpotNumber("16A").licensePlateCar("0000000").brandCar("Hyundai").modelCar("Veloster").registrationDate(LocalDateTime.now()).responsibleName("Anyone").apartment("16").block("A").build();
+        parkingSpotModel = ParkingSpotModel.builder()
+                .id(UUID.randomUUID())
+                .parkingSpotNumber("16A")
+                .licensePlateCar("0000000")
+                .brandCar("Hyundai")
+                .modelCar("Veloster")
+                .registrationDate(LocalDateTime.now())
+                .responsibleName("Anyone")
+                .apartment("16")
+                .block("A")
+                .build();
     }
 
     @DisplayName("Find all Parking Spots")
@@ -60,11 +70,14 @@ class ParkingSpotServiceTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        List<ParkingSpotResponseDto> responseDtoList = parkingSpotModelList.stream().map(modelMapper::toResponseDto).toList();
+        List<ParkingSpotResponseDto> responseDtoList = parkingSpotModelList.stream()
+                .map(modelMapper::toResponseDto)
+                .toList();
 
         Page<ParkingSpotModel> page = new PageImpl<>(parkingSpotModelList, pageable, parkingSpotModelList.size());
 
-        when(parkingSpotRepository.findAll(pageable)).thenReturn(page);
+        when(parkingSpotRepository.findAll(pageable))
+                .thenReturn(page);
 
         Page<ParkingSpotResponseDto> expectedPage = new PageImpl<>(responseDtoList, pageable, responseDtoList.size());
         Page<ParkingSpotResponseDto> actualPage = parkingSpotService.findAll(pageable);
@@ -83,7 +96,8 @@ class ParkingSpotServiceTest {
     public void testFindParkingSpotById() {
         UUID id = parkingSpotModel.getId();
 
-        when(parkingSpotRepository.findById(id)).thenReturn(Optional.of(parkingSpotModel));
+        when(parkingSpotRepository.findById(id))
+                .thenReturn(Optional.of(parkingSpotModel));
 
         ParkingSpotResponseDto expectedResponse = modelMapper.toResponseDto(parkingSpotModel);
         ParkingSpotResponseDto actualResponse = parkingSpotService.findById(id);
@@ -99,7 +113,8 @@ class ParkingSpotServiceTest {
     public void testFindParkingSpotByNonExistentId() {
         UUID noExistentId = UUID.randomUUID();
 
-        when(parkingSpotRepository.findById(noExistentId)).thenReturn(Optional.empty());
+        when(parkingSpotRepository.findById(noExistentId))
+                .thenReturn(Optional.empty());
 
         assertThrows(ResponseStatusException.class, () -> parkingSpotService.findById(noExistentId));
 
@@ -110,14 +125,16 @@ class ParkingSpotServiceTest {
     @Test
     public void testSaveParkingSpot() {
 
-        when(parkingSpotRepository.save(any(ParkingSpotModel.class))).thenReturn(parkingSpotModel);
+        when(parkingSpotRepository.save(any(ParkingSpotModel.class)))
+                .thenReturn(parkingSpotModel);
 
         ParkingSpotRequestDto requestDto = modelMapper.toRequestDto(parkingSpotModel);
         ParkingSpotResponseDto responseDto = modelMapper.toResponseDto(parkingSpotModel);
 
         ParkingSpotResponseDto savedParkingSpot = parkingSpotService.save(requestDto);
 
-        verify(parkingSpotRepository, times(1)).save(any(ParkingSpotModel.class));
+        verify(parkingSpotRepository, times(1))
+                .save(any(ParkingSpotModel.class));
 
         assertEquals(responseDto.apartment(), savedParkingSpot.apartment());
         assertEquals(responseDto.parkingSpotNumber(), savedParkingSpot.parkingSpotNumber());
@@ -130,12 +147,57 @@ class ParkingSpotServiceTest {
         assertEquals(responseDto.registrationDate(), savedParkingSpot.registrationDate());
     }
 
-    @DisplayName("Delete Parking Spot By Existing ID")
+    @DisplayName("Save - Exists By Parking Spot Number")
+    @Test
+    public void testSaveExistingByParkingSpotNumber() {
+        String parkingSpotNumber = "85";
+
+        ParkingSpotRequestDto requestDto = modelMapper.toRequestDto(parkingSpotModel);
+        requestDto.setParkingSpotNumber(parkingSpotNumber);
+
+        when(parkingSpotRepository.existsByParkingSpotNumber(parkingSpotNumber))
+                .thenReturn(true);
+
+        assertThrows(ResponseStatusException.class, () -> parkingSpotService.save(requestDto));
+    }
+
+    @DisplayName("Save - Exists by License Plate Car")
+    @Test
+    public void testSaveExistsByLicensePlateCar() {
+        String licensePlateCar = "0000000";
+
+        ParkingSpotRequestDto requestDto = modelMapper.toRequestDto(parkingSpotModel);
+        requestDto.setLicensePlateCar(licensePlateCar);
+
+        when(parkingSpotRepository.existsByLicensePlateCar(licensePlateCar))
+                .thenReturn(true);
+
+        assertThrows(ResponseStatusException.class, () -> parkingSpotService.save(requestDto));
+    }
+
+    @DisplayName("Save - Exists by License Plate Car")
+    @Test
+    public void testSaveExistsApartmentAndBlock() {
+        String apartment = "16";
+        String block  = "A";
+
+        ParkingSpotRequestDto requestDto = modelMapper.toRequestDto(parkingSpotModel);
+        requestDto.setApartment(apartment);
+        requestDto.setBlock(block);
+
+        when(parkingSpotRepository.existsByApartmentAndBlock(apartment, block))
+                .thenReturn(true);
+
+        assertThrows(ResponseStatusException.class, () -> parkingSpotService.save(requestDto));
+    }
+
+    @DisplayName("Delete - Existing ID")
     @Test
     public void testDeleteParkingSpotByID() {
         UUID id = parkingSpotModel.getId();
 
-        when(parkingSpotRepository.findById(id)).thenReturn(Optional.of(parkingSpotModel));
+        when(parkingSpotRepository.findById(id))
+                .thenReturn(Optional.of(parkingSpotModel));
 
         parkingSpotService.deleteById(id);
 
@@ -147,7 +209,8 @@ class ParkingSpotServiceTest {
     public void testDeleteParkingSpotByNonExistingID() {
         UUID id = UUID.randomUUID();
 
-        when(parkingSpotRepository.findById(id)).thenReturn(Optional.empty());
+        when(parkingSpotRepository.findById(id))
+                .thenReturn(Optional.empty());
 
         assertThrows(ResponseStatusException.class, () -> parkingSpotService.deleteById(id));
     }
@@ -157,12 +220,14 @@ class ParkingSpotServiceTest {
     public void testExistsByParkingSpotNumber() {
         String parkingSpotNumber = "1";
 
-        when(parkingSpotService.existsByParkingSpotNumber(parkingSpotNumber)).thenReturn(true);
+        when(parkingSpotService.existsByParkingSpotNumber(parkingSpotNumber))
+                .thenReturn(true);
 
         boolean existsByParkingSpotNumber = parkingSpotService.existsByParkingSpotNumber(parkingSpotNumber);
 
-        verify(parkingSpotRepository, times(1)).existsByParkingSpotNumber(parkingSpotNumber);
-        Assertions.assertTrue(existsByParkingSpotNumber);
+        verify(parkingSpotRepository, times(1))
+                .existsByParkingSpotNumber(parkingSpotNumber);
+        assertTrue(existsByParkingSpotNumber);
     }
 
     @DisplayName("Exists by Apartment and Block")
@@ -171,12 +236,14 @@ class ParkingSpotServiceTest {
         String apartment = "16";
         String block = "A";
 
-        when(parkingSpotRepository.existsByApartmentAndBlock(apartment, block)).thenReturn(true);
+        when(parkingSpotRepository.existsByApartmentAndBlock(apartment, block))
+                .thenReturn(true);
 
         boolean existsByApartmentAndBlock = parkingSpotService.existsByApartmentAndBlock(apartment, block);
 
-        verify(parkingSpotRepository, times(1)).existsByApartmentAndBlock(apartment, block);
-        Assertions.assertTrue(existsByApartmentAndBlock);
+        verify(parkingSpotRepository, times(1))
+                .existsByApartmentAndBlock(apartment, block);
+        assertTrue(existsByApartmentAndBlock);
     }
 
     @DisplayName("Exists by License Plate Car")
@@ -184,11 +251,40 @@ class ParkingSpotServiceTest {
     public void testExitsByLicensePlateCar() {
         String licensePlateCar = "0000000";
 
-        when(parkingSpotRepository.existsByLicensePlateCar(licensePlateCar)).thenReturn(true);
+        when(parkingSpotRepository.existsByLicensePlateCar(licensePlateCar))
+                .thenReturn(true);
 
         boolean existsByLicensePlateCar = parkingSpotService.existsByLicensePlateCar(licensePlateCar);
 
-        verify(parkingSpotRepository, times(1)).existsByLicensePlateCar(licensePlateCar);
-        Assertions.assertTrue(existsByLicensePlateCar);
+        verify(parkingSpotRepository, times(1))
+                .existsByLicensePlateCar(licensePlateCar);
+        assertTrue(existsByLicensePlateCar);
     }
+
+    @DisplayName("Update Parking Spot")
+    @Test
+    public void updateParkingSpot() {
+        UUID id = parkingSpotModel.getId();
+        parkingSpotModel.setApartment("85");
+
+        when(parkingSpotRepository.findById(id))
+                .thenReturn(Optional.of(parkingSpotModel));
+
+        ParkingSpotRequestDto requestDto = modelMapper.toRequestDto(parkingSpotModel);
+        ParkingSpotResponseDto responseDto = parkingSpotService.update(id, requestDto);
+
+        verify(parkingSpotRepository, times(1))
+                .save(any(ParkingSpotModel.class));
+
+        assertEquals(responseDto.apartment(), requestDto.getApartment());
+        assertEquals(responseDto.parkingSpotNumber(), requestDto.getParkingSpotNumber());
+        assertEquals(responseDto.licensePlateCar(), requestDto.getLicensePlateCar());
+        assertEquals(responseDto.brandCar(), requestDto.getBrandCar());
+        assertEquals(responseDto.modelCar(), requestDto.getModelCar());
+        assertEquals(responseDto.colorCar(), requestDto.getColorCar());
+        assertEquals(responseDto.responsibleName(), requestDto.getResponsibleName());
+        assertEquals(responseDto.block(), requestDto.getBlock());
+        assertNotNull(responseDto.registrationDate());
+    }
+
 }
